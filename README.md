@@ -29,7 +29,53 @@ To give you an idea of the staggering depth and variety, there are:
 - **Religion** points you can accumulate to ask God to help you out in a fix, which he may or may not do.
 - Magic portals, quests, rumours, limb damages, curio locations, ranged weapons, arcane events, legendary items, a luck system and more!
 
-## Technical Highlights - TO DO
+## Technical Highlights
+
+Here's a look at some interesting things the game does.
+
+### Landscape Generation
+
+The game is actually a loose adaptation of a family board game I created years ago. One of the neat things about the original board game was the way the landscape is revealed as you explore. Each turn you move into a neighbouring square, and then iteratively reveal the surrounding walls or doors of any squares within sight. Then you discover if they contain anything, be it gold, an item, a trap, a monster, an NPC or whatever.
+
+I used the same approach with this digital version of the game and then extended it way beyond what would be possible in a board game where you have to manually insert the walls by hand each game.
+
+Unlike the board game, the layout of walls and doors is procedurally generated in advance, but hidden from the user and revealed as they explore. The contents of each location are still dynamically generated when they explore that square, because there are various factors that can change what you find. If you find a Luckvest armour or a Shrouded Lantern or a Helm of Iniquity, for instance, that changes what you may find as you explore.
+
+Each of the 14 different landscape types - catacombs, forest, labyrinth, swamp, etc. - have a different distribution of walls and doors when pre-generating the landscape layout each game, along with specific peculiarities. Old City and Necropolis are claustrophobic but a higher chance of events. Desert and Caverns are more open. In Desert you can run faster but lose health if you do so. In Necropolis, many of the creatures you find are undead. In Volcano deadly lava gradually spreads across the board. In Forest you can glimpse creatures without them noticing you. In Lagoon you can dive into the large central water area with a high concentration of events, or skirt around it. In Citadel the walls are arranged in procedurally generated rooms, surrounded by a moat.
+
+These diverse landscape types give a distinct flavour to each game. These are made still more unique with a random selection of landscape variations each time you play, so in one game the Necropolis or Swamp may be frozen where you can slide in straight lines. In another game it may be toxic and you lose health every turn but healing is free at temples. In another it might be populated by NPCs, or infested with a particular type of monster. This combination of random landscape type and random set of variations means that not only is the procedurally generated layout unique every game, but the theme of each game is unique before you've even started.
+
+My guiding game design principle throughout has been 'The more varied and unpredictable, the better.' I think it adds a lot to the replayability.
+
+[SCREENSHOTS]
+
+Here's a code snippet showing some of the above. TODO
+
+[CODE SNIPPET]
+
+### AI and NPC Behaviour
+
+In the original board game, NPCs would either attack, trade or join you. The rest of the time they would just stand still in a square and do nothing. Here's a quick overview of how I made them more interesting and unpredictable.
+
+First, I introduced wandering mechanics. If they are within 3 squares of your character, an NPC detects you and reacts. If they are hostile, they will move towards you; the same if they are friendly and you beckon them. If not moving because of you, they revert to independent movement. First, the code checks if there are valuables within sight, and if so, the NPC will move towards them. If not, the NPC will wander at random, with a chance of not moving, and a lower chance of returning the way they just came, so that their movement seems more focused and directional. When they meet other NPCs or monsters, there is a chance of a fight.
+
+Some NPC types are pacifist and won't ever provoke a fight; others are more aggressive. Some have specific known triggers, like a Bandit will attack you if you're perceived as 'rich' - the value of your possessions exceeds a threshold. A Thug will attack you if you have low health. A Puritan will attack you if you have multiple diseases, and so on.
+
+So that already makes the game feel more alive as these NPCs wander around with their different behaviours. But I wanted an extra level of unpredictability, so introduced secret personality traits. I came up with a list of possible triggers and a list of possible reactions, and each NPC gets one of each at random. One might give you his possessions if you enter a shop. Another might tell you a secret if you're in the dark without a light source. Another might attack you if you go through a portal.
+
+You don't know what the NPC's secret personality trait or trigger is, so you're often surprised. Your loyal Smuggler companion may suddenly announce he was actually a Friar all along. The Jester you're trading with may pick your pocket. The Scribe might reveal he is carrying a magic item, or knows where one is.
+
+In addition to these nicely unpredictable behaviours, the NPCs have a small chance of being a demon in disguise who will offer you a pact. They also pay for healing at temples if wounded. If your NPC companion is carrying a potentially dangerous Chaos item, they will initially express curiosity about it, then try to resist temptation, then finally activate it. Some will grab items you find lying around before you have a chance to. Some will initiate attacks on nearby monsters - "Let's do this!" - that you really don't want to provoke. Some will drag you through portals you didn't want to go through. Others will feel sorry for you and give you gold if you're poor.
+
+These are all relatively simple behavioural systems that can barely be called AI, but combined they give the impression of a living world and often produce interesting, surprising and fun interactions.
+
+[SCREENSHOTS]
+
+Here's a code snippet showing some of the above. TODO
+
+[CODE SNIPPET]
+
+### Challenge and Tension
 
 1. Procedural Generation System
    - Description of how diverse game elements are generated
