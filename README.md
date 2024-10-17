@@ -2,7 +2,7 @@
 
 ## Introduction
 
-**Wayfarer** is a single-player turn-based 'dungeon crawler' game that runs in Windows. I wrote it in C# using Unity. It is the very definition of a passion project - I spent two years developing it, with no intention of a public release. It was always just for myself and family and friends to play. During that time it has evolved in scope and complexity far beyond what I imagined when starting it.
+**Wayfarer** is a single-player turn-based 'dungeon crawler' game that runs in Windows. I wrote it in C# using Unity, and it has 110,000 lines of code. It is the very definition of a passion project - I spent two years developing it, with no intention of a public release. It was always just for myself and family and friends to play. During that time it has evolved in scope and complexity far beyond what I imagined when starting it.
 
 ## Game Overview
 
@@ -47,8 +47,10 @@ My guiding game design principle throughout has been 'The more varied and unpred
 
 [SCREENSHOTS]
 
+### Code Snippet - how the Infestation landscape variation is created:
+
 <details>
-<summary>Click the triangle to expand a code snippet showing how the Infestation landscape variation is created.
+<summary>Click this triangle to view the code.
 </summary>
 
 ```c#
@@ -128,30 +130,85 @@ public static void RemoveInfestationIfItBecameAHaven()
 
 In the original board game, NPCs would either attack, trade or join you. The rest of the time they would just stand still in a square and do nothing. Here's a quick overview of how I made them more interesting and unpredictable.
 
-First, I introduced wandering mechanics. If they are within 3 squares of your character, an NPC detects you and reacts. If they are hostile, they will move towards you; the same if they are friendly and you beckon them. If not moving because of you, they revert to independent movement. First, the code checks if there are valuables within sight, and if so, the NPC will move towards them. If not, the NPC will wander at random, with a chance of not moving, and a lower chance of returning the way they just came, so that their movement seems more focused and directional. When they meet other NPCs or monsters, there is a chance of a fight.
+First, I introduced wandering mechanics. If they are within 3 squares of your character, an NPC detects you and reacts. If they are hostile, they will move towards you; the same if they are friendly and you beckon them. If not moving because of you, they revert to independent movement. First, the code checks if there are valuables within sight, and if so, the NPC will move towards them and pick them up. If not, the NPC will wander at random, with a chance of not moving, and a lower chance of returning the way they just came, so that their movement seems more focused and directional. When they meet other NPCs or monsters, there is a chance of a fight.
 
-Some NPC types are pacifist and won't ever provoke a fight; others are more aggressive. Some have specific known triggers, like a Bandit will attack you if you're perceived as 'rich' - the value of your possessions exceeds a threshold. A Thug will attack you if you have low health. A Puritan will attack you if you have multiple diseases, and so on.
+Some NPC types are pacifist and won't ever provoke a fight; others are more aggressive. Some have specific known triggers, like a Bandit will attack you if you're perceived as 'rich, the value of your possessions exceeding a threshold. A Thug will attack you if you have low health. A Puritan will attack you if you have multiple diseases, and so on.
 
 So that already makes the game feel more alive as these NPCs wander around with their different behaviours. But I wanted an extra level of unpredictability, so introduced secret personality traits. I came up with a list of possible triggers and a list of possible reactions, and each NPC gets one of each at random. One might give you his possessions if you enter a shop. Another might tell you a secret if you're in the dark without a light source. Another might attack you if you go through a portal.
 
 You don't know what the NPC's secret personality trait or trigger is, so you're often surprised. Your loyal Smuggler companion may suddenly announce he was actually a Friar all along. The Jester you're trading with may pick your pocket. The Scribe might reveal he is carrying a magic item, or knows where one is.
 
-In addition to these nicely unpredictable behaviours, the NPCs have a small chance of being a demon in disguise who will offer you a pact. They also pay for healing at temples if wounded. If your NPC companion is carrying a potentially dangerous Chaos item, they will initially express curiosity about it, then try to resist temptation, then finally activate it. Some will grab items you find lying around before you have a chance to. Some will initiate attacks on nearby monsters - "Let's do this!" - that you really don't want to provoke. Some will drag you through portals you didn't want to go through. Others will feel sorry for you and give you gold if you're poor.
+In addition to these surprise behaviours, the NPCs have a small chance of being a demon in disguise who will offer you a pact. They also pay for healing at temples if wounded. If your NPC companion is carrying a potentially dangerous Chaos item, they will initially express curiosity about it, then try to resist temptation, then finally activate it. Some will grab items you find lying around before you have a chance to. Some will initiate attacks on nearby monsters - "Let's do this!" - that you really don't want to provoke. Some will drag you through portals you didn't want to go through. Others will feel sorry for you and give you gold if you're poor.
 
-These are all relatively simple behavioural systems that can barely be called AI, but combined they give the impression of a living world and often produce interesting, surprising and fun interactions.
+These are all relatively simple behavioural systems that can barely be called AI, but combined they give the impression of a living world and often produce delightful and unexpected interactions.
 
 [SCREENSHOTS]
 
+### Code Snippet - testing whether an NPC (called a Maverick in the game) is actually a Demon.
+
 <details>
-<summary>Click the arrow to expand a code snippet showing some of the above.</summary>
+<summary>Click this triangle to view the code.
+</summary>
 
 ```c#
-public class HelloWorld
+public void SeeIfSecretlyADemon()
 {
-    public static void Main(string[] args)
+    // During Witching Hour, they are always a demon
+    if (Phase.IsCurrentPhase(PhaseType.WitchingHour))
     {
-        Console.WriteLine("Hello, World!");
+        isADemon = true;
+        return;
     }
+
+    // Skip if we've tested them before, or they're a Bounty Hunt target or a Stalker
+    if (demonTested
+        || isBountyHuntTarget
+        || maverickType == MaverickType.Stalker)
+    {
+        return;
+    }
+
+    // Only test each maverick once
+    demonTested = true;
+
+    // Base chance of being a demon = 15%
+    int chanceOfBeingADemon = DemonicPact.percentageChanceOfEachMaverickBeingADemon;
+
+    // House of Tears
+    chanceOfBeingADemon += Order.GetHouseOfTearsAdditionalChanceOfMavericksBeingDemons();
+
+    if (Character.DemonAligned())
+    {
+        // Demon Sword etc increases the chance of a maverick being a demon by 15%
+        chanceOfBeingADemon += DemonicPact.percentageChanceOfEachMaverickBeingADemon;
+
+        if (Character.inventory.HasSkirmisherTwoActiveWeaponsOfSameType(MagicItemType.DemonSword))
+        {
+            // Skirmisher with two Demon Swords(!) so increase the likelihood of being a demon even more
+            chanceOfBeingADemon += DemonicPact.percentageChanceOfEachMaverickBeingADemon;
+        }
+    }
+
+    if (LandscapeVariation.runic)
+    {
+        // Runic landscape also increases the chance of a maverick being a demon by 15%
+        chanceOfBeingADemon += DemonicPact.percentageChanceOfEachMaverickBeingADemon;
+    }
+
+    // Demonologists have a 50% chance of being a demon under normal circumstances, i.e. 15% + 35%
+    if (maverickType == MaverickType.Demonologist)
+    {
+        chanceOfBeingADemon += 35;
+    }
+
+    // Whispers of the Abyss helmet increases the chance a lot too
+    if (Character.inventory.HasMagicItemActive(MagicItemType.WhispersOfTheAbyss))
+    {
+        chanceOfBeingADemon += 35;
+    }
+
+    // Roll 1D100 and set the Maverick's 'isADemon' property if appropriate
+    isADemon = Randomiser.PercentChanceSucceeds(chanceOfBeingADemon);
 }
 ```
 
@@ -177,8 +234,11 @@ The combination of these factors means you have steadily building tension throug
 
 [SCREENSHOTS]
 
+### Code Snippet - how TODO
+
 <details>
-<summary>Click the arrow to expand a code snippet showing some of the above.</summary>
+<summary>Click this triangle to view the code.
+</summary>
 
 ```c#
 public class HelloWorld
@@ -200,8 +260,11 @@ The straightforward system I came up with is that any magic item in the game you
 
 [SCREENSHOTS]
 
+### Code Snippet - how TODO
+
 <details>
-<summary>Click the arrow to expand a code snippet showing some of the above.</summary>
+<summary>Click this triangle to view the code.
+</summary>
 
 ```c#
 public class HelloWorld
