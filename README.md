@@ -2,7 +2,7 @@
 
 ## Introduction
 
-**Wayfarer** is a single-player turn-based dungeon crawler game that runs in Windows. I wrote it in C# using Unity. It is the very definition of a passion project - I spent two years developing it, with no intention of a public release. It was always just for myself and family and friends to play. During that time it has evolved in scope and complexity far beyond what I imagined when starting it.
+**Wayfarer** is a single-player turn-based 'dungeon crawler' game that runs in Windows. I wrote it in C# using Unity. It is the very definition of a passion project - I spent two years developing it, with no intention of a public release. It was always just for myself and family and friends to play. During that time it has evolved in scope and complexity far beyond what I imagined when starting it.
 
 ## Game Overview
 
@@ -35,23 +35,32 @@ Here's a look at some interesting things the game does.
 
 ### Landscape Generation
 
-The game is actually a loose adaptation of a family board game I created years ago. One of the neat things about the original board game was the way the landscape is revealed as you explore. Each turn you move into a neighbouring square, and then iteratively reveal the surrounding walls or doors of any squares within sight. Then you discover if they contain anything, be it gold, an item, a trap, a monster, an NPC or whatever.
+The game is a loose adaptation of a family board game I created years ago. One of the neat things about the original board game was the way the landscape is revealed as you explore. Each turn you move into a neighbouring square, and then iteratively reveal the surrounding walls or doors of any squares within sight. Then you discover if they contain anything, be it gold, an item, a trap, a monster, an NPC or whatever.
 
-I used the same approach with this digital version of the game and then extended it way beyond what would be possible in a board game where you have to manually insert the walls by hand each game.
+I used the same approach with this digital version of the game. Unlike the board game, though, the layout of walls and doors is procedurally generated in advance, hidden from the user and revealed as they explore. The contents of each location are still dynamically generated when they explore that square, because there are various factors that can change what you find. If you own a Luckvest or a Shrouded Lantern or a Helm of Iniquity, for instance, that changes what you may find as you explore.
 
-Unlike the board game, the layout of walls and doors is procedurally generated in advance, but hidden from the user and revealed as they explore. The contents of each location are still dynamically generated when they explore that square, because there are various factors that can change what you find. If you find a Luckvest armour or a Shrouded Lantern or a Helm of Iniquity, for instance, that changes what you may find as you explore.
+Each of the 14 different landscape types - catacombs, forest, labyrinth, swamp, etc. - have a different distribution of walls and doors when pre-generating the landscape layout each game, along with specific peculiarities. Old City and Necropolis are claustrophobic but a higher chance of events. Desert and Caverns are more open. In Desert you can run faster but lose health if you do. In Necropolis, many of the creatures you find are undead. In Volcano, deadly lava gradually spreads across the board. In Forest you can glimpse creatures without them noticing you. In Lagoon you can dive into the large central water area with a high concentration of events, or skirt around it. In Citadel the walls are arranged in procedurally generated rooms, surrounded by a moat.
 
-Each of the 14 different landscape types - catacombs, forest, labyrinth, swamp, etc. - have a different distribution of walls and doors when pre-generating the landscape layout each game, along with specific peculiarities. Old City and Necropolis are claustrophobic but a higher chance of events. Desert and Caverns are more open. In Desert you can run faster but lose health if you do so. In Necropolis, many of the creatures you find are undead. In Volcano deadly lava gradually spreads across the board. In Forest you can glimpse creatures without them noticing you. In Lagoon you can dive into the large central water area with a high concentration of events, or skirt around it. In Citadel the walls are arranged in procedurally generated rooms, surrounded by a moat.
+These diverse landscape types give a distinct flavour to each game. This is refined with a random selection of landscape variations each time you play, so in one game the Swamp may be _frozen_ where you can slide in straight lines. In another game it may be _toxic_ and you lose health every turn but healing is free at temples. In another it might be populated by NPCs, or infested with a particular type of monster. This combination of random landscape type and random set of variations means that not only is the procedurally generated layout different every game, but the theme of each game is unique before you've even started.
 
-These diverse landscape types give a distinct flavour to each game. These are made still more unique with a random selection of landscape variations each time you play, so in one game the Necropolis or Swamp may be frozen where you can slide in straight lines. In another game it may be toxic and you lose health every turn but healing is free at temples. In another it might be populated by NPCs, or infested with a particular type of monster. This combination of random landscape type and random set of variations means that not only is the procedurally generated layout unique every game, but the theme of each game is unique before you've even started.
-
-My guiding game design principle throughout has been 'The more varied and unpredictable, the better.' I think it adds a lot to the replayability.
+My guiding game design principle throughout has been 'The more varied and unpredictable, the better.' I think it adds a lot to the replayability to keep discovering things you didn't know could happen and rare magic items you've never seen before.
 
 [SCREENSHOTS]
 
-Here's a code snippet showing some of the above. TODO
+<details>
+<summary>Click the arrow to expand a code snippet showing some of the above.</summary>
 
-[CODE SNIPPET]
+```c#
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("Hello, World!");
+    }
+}
+```
+
+</details>
 
 ### AI and NPC Behaviour
 
@@ -71,11 +80,22 @@ These are all relatively simple behavioural systems that can barely be called AI
 
 [SCREENSHOTS]
 
-Here's a code snippet showing some of the above. TODO
+<details>
+<summary>Click the arrow to expand a code snippet showing some of the above.</summary>
 
-[CODE SNIPPET]
+```c#
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("Hello, World!");
+    }
+}
+```
 
-### Challenge and Tension - TODO
+</details>
+
+### Challenge and Tension
 
 Getting the right degree of challenge is crucial for any game, and I've rage quit many commercial games for getting that delicate balance wrong.
 
@@ -95,9 +115,20 @@ The combination of these factors means you have steadily building tension throug
 
 [SCREENSHOTS]
 
-Here's a code snippet showing some of the above. TODO
+<details>
+<summary>Click the arrow to expand a code snippet showing some of the above.</summary>
 
-[CODE SNIPPET]
+```c#
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("Hello, World!");
+    }
+}
+```
+
+</details>
 
 ### Legendary Magic Items
 
@@ -107,9 +138,20 @@ The straightforward system I came up with is that any magic item in the game you
 
 [SCREENSHOTS]
 
-Here's a code snippet showing some of the above. TODO
+<details>
+<summary>Click the arrow to expand a code snippet showing some of the above.</summary>
 
-[CODE SNIPPET]
+```c#
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("Hello, World!");
+    }
+}
+```
+
+</details>
 
 ## Development Journey and Current State
 
