@@ -47,11 +47,10 @@ My guiding game design principle throughout has been 'The more varied and unpred
 
 [SCREENSHOTS]
 
-### Code Snippet - how the Infestation landscape variation is created:
+### _Code Snippet_ - how the Infestation landscape variation is created:
 
 <details>
-<summary>Click this triangle to view the code.
-</summary>
+<summary>Click this triangle to view the code.</summary>
 
 ```c#
 public static void InitialiseInfested(Square sourceSquare, bool addInitialMonster)
@@ -144,11 +143,10 @@ These are all relatively simple behavioural systems that can barely be called AI
 
 [SCREENSHOTS]
 
-### Code Snippet - testing whether an NPC (called a Maverick in the game) is actually a Demon.
+### _Code Snippet_ - testing whether an NPC (called a Maverick in the game) is actually a Demon.
 
 <details>
-<summary>Click this triangle to view the code.
-</summary>
+<summary>Click this triangle to view the code.</summary>
 
 ```c#
 public void SeeIfSecretlyADemon()
@@ -216,63 +214,129 @@ public void SeeIfSecretlyADemon()
 
 ### Challenge and Tension
 
-Getting the right degree of challenge is crucial for any game, and I've rage quit many commercial games for getting that delicate balance wrong.
+Getting the right degree of challenge is crucial for any game, and I've been put off many commercial games for getting that delicate balance wrong.
 
 In the original board game version of Wayfarer, it was a multi-player game, so there was an inherent competitive challenge because whoever completed a quest and then escaped first would win. For my digital version, as a single player game, there needed to be some kind of time limit to provide tension. Otherwise you could just potter around the landscape collecting nice items and gold forever.
 
 Here are the various mechanics I've implemented to create tension and keep you on your toes.
 
-Firstly, the are the Doom Dice. After a set number of turns (18 in a level 1 game), the Doom Dice roll at the end of each turn. These are two D12 dice which literally roll above the board - the camera back to watch them. When the side with a skull comes up (1/12 chance each turn per dice), that dice explodes. Once both are gone, the game is over. This means that as you're playing, you have a countdown to when the Doom Dice start, then the tension of watching them roll, then after a few turns one will explode, meaning you're down to one dice and the game is likely to end in the next few turns while you run panicking for the exit.
+First, there are the _Doom Dice_. After a set number of turns (18 in a level 1 game), the Doom Dice appear and roll at the end of each turn. These are two D12 dice which literally roll above the board - the camera zooms out to watch them. When the side with a skull comes up (1/12 chance each turn per dice), that dice explodes. Once both are gone, the game is over. This means that as you're playing, you have a countdown to when the Doom Dice start, then the tension of watching them roll. Then after a few turns one will explode, meaning you're down to one dice and the game is likely to end in the next few turns while you run panicking for the exit.
 
 It works very well and fits with the unpredictable nature of the game. Once the Doom Dice start rolling, you never know exactly how many turns you have left but you know you need to hurry and that every turn matters.
 
-The second device for creating time pressure is pits. Every turn one of the 400 squares on the board collapses into an impassable pit, blocking your way and with a small but significant chance it will happen to open under you. So the landscape is disintegrating over time, making it more and more difficult to escape. Of course there are various ways of dealing with pits - magic items, spells, religion, etc. But they successfully add an extra layer of tension. One of the addictive qualities about Wayfarer is that no matter how powerful your character becomes, you can never take for granted that you can make it to an exit square without mishap. There are so many random things that could go wrong. It's a game of mitigating risk, but winning is never certain.
+The second device for creating pressure is _pits_. Every turn, one of the 400 squares on the board collapses into an impassable pit, blocking your way - with a small but significant chance it will happen to open under you. So the landscape disintegrates over time, making it more and more difficult to escape. Of course there are various ways of dealing with pits - magic items, spells, religion, etc. But this successfully adds an extra layer of tension.
 
-When you win a game your character gets to keep the gold and items he's carrying, but if you lose (i.e. the Doom Dice explode before you've reached an exit) then you lose everything you've found that game. This means that when you find a unique rare legendary magic item, there's suddenly a whole extra layer of tension because if you don't win, the item will be gone forever. Conversely if you win, you'll reap the benefits of that item across all subsequent games with that character.
+One of the addictive qualities about Wayfarer is that no matter how powerful your character becomes, you can never take for granted that you can make it to an exit square without mishap. There are so many random things that can go wrong. It's a game of mitigating risk, but winning is never certain and that keeps it interesting.
 
-The combination of these factors means you have steadily building tension throughout each game and you're frequently on the edge of your seat in the later stages, as the landscape collapses around you and you're desperately trying to get to the exit with your precious new magic armour before the Doom Dice shut you down.
+When you win a game, your character gets to keep the gold and items he's carrying, but if you lose (i.e. the Doom Dice explode before you've reached an exit) then you lose everything you've found that game. This means that when you find a unique rare legendary magic item, there's suddenly even more at stake, because if you don't win, the item will be gone forever. Conversely if you win, you'll reap the benefits of that item across all subsequent games with that character.
+
+The combination of these factors means you have steadily building tension throughout each game. You're frequently on the edge of your seat in the later stages, as the landscape collapses around you and you're desperately trying to get to the exit with your precious new magic armour before the Doom Dice shut you down.
 
 [SCREENSHOTS]
 
-### Code Snippet - how TODO
+### _Code Snippet_ - the Doom Dice roll at the end of each turn:
 
 <details>
-<summary>Click this triangle to view the code.
-</summary>
+<summary>Click this triangle to view the code.</summary>
 
 ```c#
-public class HelloWorld
+IEnumerator DoDoom()
 {
-    public static void Main(string[] args)
+    if (turnCounter > turnAfterWhichDoomStarts && !doomAverted)
     {
-        Console.WriteLine("Hello, World!");
+        // Wait for any panels to close before proceeding, as they might be busy godcalling to save from a pit
+        yield return StartCoroutine(WaitForPanelsToClose());
+
+        CameraController.OnShouldMoveToVantagePoint(DoomDice.vantagePoint, false);
+
+        // Spin dice #1 if it still exists
+        SpinDoomDice(doomDice1, true, out bool dice1JustDoomed);
+
+        // Spin dice #2 if it still exists
+        SpinDoomDice(doomDice2, false, out bool dice2JustDoomed);
+
+        if ((doomDice1 == null || dice1JustDoomed)
+            && (doomDice2 == null || dice2JustDoomed))
+        {
+            // The game's about to end. Set gameOver now so that if they click the log,
+            // it doesn't cause a crash
+            gameOver = true;
+        }
+
+        // Wait so they can see the animation
+        yield return new WaitForSeconds(3.5f);
+
+        // Blow up either dice that rolled a '1' with camera shake and an explosion
+        if (dice1JustDoomed && doomDice1 != null)
+        {
+            yield return StartCoroutine(DestroyDoomDice(doomDice1));
+            doomDice1 = null;
+        }
+
+        if (dice2JustDoomed && doomDice2 != null)
+        {
+            yield return StartCoroutine(DestroyDoomDice(doomDice2));
+            doomDice2 = null;
+        }
+
+        // Tell the user if we lost one or both
+        if (doomDice1 == null && doomDice2 == null)
+        {
+            // Unlucky! Game over.
+            yield return new WaitForSeconds(0.5f);
+
+            GameLost();
+            yield break;
+        }
+        else if (dice1JustDoomed || dice2JustDoomed)
+        {
+            Log.AddText("Only one Doom dice remains. Hurry!");
+        }
+
+        // Keep track of how many Doom rolls we've had since the last Mercy
+        doomRollsSinceLastMercy++;
     }
 }
-```
 
-</details>
-
-### Legendary Magic Items
-
-Not content with having a wealth of unique magic items in the game (255 at the time of writing and more added all the time), I decided to introduce a system of _legendary_ items which are extremely rare but which the mere possibility of finding would motivate you to keep exploring and playing again once you found one because they persist across multiple games.
-
-The straightforward system I came up with is that any magic item in the game you find has a small chance of also being legendary, then to have a series of possible legendary effects it can have. Some of these are ultra rare and extra powerful, something that makes you gasp when you find one. The selection of which legendary type any given item has is random but biased towards the item type. A magic weapon is more likely to have a legendary effect related to combat, for example.
-
-[SCREENSHOTS]
-
-### Code Snippet - how TODO
-
-<details>
-<summary>Click this triangle to view the code.
-</summary>
-
-```c#
-public class HelloWorld
+static void SpinDoomDice(DoomDice doomDice, bool isLeftDice, out bool justDoomed)
 {
-    public static void Main(string[] args)
+    justDoomed = false;
+
+    if (doomDice)
     {
-        Console.WriteLine("Hello, World!");
+        // Find out the result before pretending to roll the dice
+        justDoomed = DoomDice.DoomRoll();
+
+        // Roll the dice in a way that matches the result we already know
+        if (justDoomed)
+        {
+            doomDice.StartSpinDoom(isLeftDice);
+        }
+        else
+        {
+            doomDice.StartSpinSafe(isLeftDice);
+        }
     }
+}
+
+IEnumerator DestroyDoomDice(DoomDice doomDice)
+{
+    // Rumble
+    yield return StartCoroutine(ShakeAndWait(1.5f, 0.1f, 1.5f));
+
+    // Boom
+    yield return StartCoroutine(ShakeAndWait(0.2f, 2f, 0f));
+
+    // Spawn an explosion and destroy the dice object
+    particleSpawner.SpawnExplosion(doomDice.gameObject.transform.position + new Vector3(0, 2, 0));
+    Destroy(doomDice.gameObject);
+
+    // Return to vantage point as the explosion can knock the camera to the side
+    CameraController.OnShouldMoveToVantagePoint(DoomDice.vantagePoint, false);
+
+    // After shake
+    yield return StartCoroutine(ShakeAndWait(1f, 0.05f, 0f));
+    yield return new WaitForSeconds(2f);
 }
 ```
 
