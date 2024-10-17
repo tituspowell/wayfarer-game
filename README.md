@@ -48,14 +48,76 @@ My guiding game design principle throughout has been 'The more varied and unpred
 [SCREENSHOTS]
 
 <details>
-<summary>Click the arrow to expand a code snippet showing some of the above.</summary>
+<summary>Click the triangle to expand a code snippet showing how the Infestation landscape variation is created.
+</summary>
 
 ```c#
-public class HelloWorld
+public static void InitialiseInfested(Square sourceSquare, bool addInitialMonster)
 {
-    public static void Main(string[] args)
+    infestationSource = sourceSquare;
+
+    // Show the symbol of the infestation source on the board
+    DungeonManager.CreateInfestationSymbol(sourceSquare);
+
+    // Pick a monster type
+    infestationMonsterType = Monster.GetRandomMonsterTypeForInfested();
+
+    if (addInitialMonster)
     {
-        Console.WriteLine("Hello, World!");
+        // Start with one there
+        InfestationIncreases();
+    }
+
+    // Smash surrounding walls and doors so they aren't just stuck in a box
+    sourceSquare.DestroySurroundingBoundaries(true, true, false);
+}
+
+public static void InfestationIncreases()
+{
+    if (infestationSource.isHaven)
+    {
+        // Monsters aren't allowed in Havens
+        RemoveInfestationIfItBecameAHaven();
+        return;
+    }
+
+    // Don't exceed the maximum number of monsters in a square
+    if (Monster.GetMonstersInSquare(infestationSource, false).Count <= maxMonstersInSquare)
+    {
+        // Spawn a new monster
+        Monster monster = Monster.SpawnMonster(infestationSource, false);
+        monster.Initialise(infestationSource, false, infestationMonsterType, true);
+        monster.SetNotRareVariation();
+
+        // Raise it up so it's not in the floor
+        Utilities.SetGameObjectToPlayerHeight(monster.gameObject, false, infestationSource.isPitted, false, "newly spawned infestation monster");
+
+        // Turn it so the monsters aren't all facing east
+        Utilities.ApplyRandomRotationAndOffset(monster.gameObject);
+        infestationSource.SeparateFiguresIfNecessary();
+
+        // In case the player is nearby, check for reactions
+        if (Character.initialised)
+        {
+            character.CheckIfVisibleMonstersReact();
+            character.CheckIfVisibleMavericksReact();
+        }
+    }
+}
+
+public static void RemoveInfestationIfItBecameAHaven()
+{
+    if ((infested || Chaos.pestilence) && infestationSource.isHaven)
+    {
+        string where = SquareContentsDescriber.GetDirectionDescription(infestationSource, Character.currentSquare);
+        Character.BroadcastLessImportantInfo($"The infestation source{where} has become a Haven so the infestation is over.");
+
+        // No more infestation
+        Chaos.pestilence = false;
+        infested = false;
+
+        // Remove the symbol in the square
+        DungeonManager.RemoveSquareSymbolIn(infestationSource);
     }
 }
 ```
