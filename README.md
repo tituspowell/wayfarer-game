@@ -31,7 +31,7 @@ To give you an idea of the staggering depth and variety, there are:
 
 ## Technical Highlights
 
-Here's a look at some interesting things the game does.
+Here are some of the interesting things the game does.
 
 ### Landscape Generation
 
@@ -346,17 +346,19 @@ IEnumerator DestroyDoomDice(DoomDice doomDice)
 
 The initial motivation for creating Wayfarer was to refresh my programming skills by recreating a family board game. I was completely new to Unity so it was an ambitious challenge to take on, having not done any coding for several years. I had no idea how much it would evolve beyond the original board game, or how deep and complex the game mechanics would become over the next two years.
 
-One thing it suffers from is a lack of a wider player base. My family have been playing it avidly over the past two years and giving me fantastic feedback as well as obscure issues to fix. But because nobody new was playing it, there's a distinct lack of onboarding. Apart from a nominal 'tutorial mode' where it is slightly gentler with its random events, there really is nothing to help ease a new player into the game, or introduce the mechanics. A seasoned gamer would figure a lot of it out after a couple of games but my lack of focus on the user experience for new players is immediately evident if you try it. I added a 'Help' button recently to at least give players a summary of where they are up to in a game. For a proper public release it would need a full interactive tutorial. I've considered this a few times but it would be so much work that I haven't taken that on.
+One thing it suffers from is a lack of a wider player base. My family have been playing it avidly over the past two years and giving me fantastic feedback as well as obscure issues to fix. But because nobody new was playing it, there's a distinct lack of onboarding. Apart from a nominal 'tutorial mode' where it is slightly gentler with its random events, there really is nothing to help ease a new player into the game, or introduce the mechanics. A seasoned gamer would figure a lot of it out after a couple of games but my lack of focus on the user experience for new players is immediately evident if you try it.
 
-The graphics are decidedly janky, my lack of Unity experience showing, with poor lighting, generic assets (a single animated monster token to represent all of the various monster types, for example) and almost no awareness of shaders and particle effects. There is no audio at all.
+I added a 'Help' button recently to at least give players a summary of where they are up to in a game. For a proper public release, though, it would need a full interactive tutorial. I've considered this a few times but it would be so much work that I haven't taken that on (yet).
 
-The clever things it does, and the wonderfully varied gameplay that is its core appeal, only really emerges once you get past the amateurish graphics and the lack of tutorial. Making it a finished, polished game would take an immense amount more work, and as I'm not looking to become a game designer, much of that would feel irrelevant and time-consuming - creating prettier animated assets, for example. I did learn Blender at one point to create a custom scythe model that appears so small on the screen you can't appreciate any of the detail.
+The graphics are decidedly janky, my lack of Unity experience showing, with poor lighting, generic assets (a single animated monster token to represent all of the various monster types, for example) and very little awareness of shaders and particle effects. There is no audio at all.
+
+The clever things it does, and the wonderfully varied gameplay that is its core appeal, only really emerges once you get past the amateurish graphics and the lack of tutorial. Making it a finished, polished game would take an immense amount more work, and as I'm not looking to become a game designer, much of that would feel irrelevant and time-consuming - creating prettier animated assets, for example. I did learn Blender at one point to create a custom scythe model that appears so small on the screen you can't appreciate any of the detail. Perhaps in the near future, AI will be able to create animated 3D assets from a text prompt, which would make a graphical overhaul much easier.
 
 ## Platforms
 
-Unity lets you build for different platforms and, as a lifelong Windows user, I naturally developed it for Windows. This is obviously a limitation, as Mac users can't play it; nor can it be played on devices. Unity supports all these other platforms but porting it to another one would be non trivial. There is a lot of information provided when you mouse-over elements in the game, for example, and if porting to an iPad that would need to be reworked completely.
+Unity lets you build for different platforms. As a lifelong Windows user, I naturally developed it for Windows. This is obviously a limitation, as Mac users can't play it; nor can it be played on devices. Unity supports all these other platforms but porting it to another one would be non trivial. The game provides a lot of contextual information when you mouse-over elements in the game, for example; if porting to an iPad that would need to be reworked completely.
 
-I did briefly manage a web port and have it working in a browser early on. The challenge there is that the game saves to a save file to keep track of your characters and progress, which is too large for localStorage (and too precious if you've sunk thousands of hours into playing it). Saving it to the cloud using my brother's AWS key did work but it would need a more scalable solution if shared publicly.
+I did briefly manage a web port and had it working in a browser early on. The challenge there is that the game saves to a save file to keep track of your characters and progress, which is too large for localStorage (and too precious if you've sunk thousands of hours into playing it). Saving it to the cloud using my brother's AWS key did work as a proof of concept but it would need a more scalable solution if shared publicly.
 
 ## Reflections on Technical Decisions
 
@@ -364,21 +366,20 @@ The game successfully provides countless hours of entertainment but several init
 
 Here are my reflections on some of those technical decisions and what I learned from them.
 
-- Single player vs multiplayer. As a Unity noob starting an ambitious project, I knew that multiplayer would be too difficult. I also knew that if I didn't weave it into the game right from the beginning, it would be impossible to add later. Perhaps I should have started with a simple multiplayer game first - Tic Tac Toe or Battleships. But I was eager to start and so it is forever a single player game.
+- Single player vs multiplayer. As a Unity noob starting an ambitious project, I knew that multiplayer would be too difficult for me. I also knew that if I didn't weave it into the game right from the beginning, it would be impossible to add later. I probably should have started with an unrelated simple multiplayer game first - Tic Tac Toe or Battleships. But I was eager to dive in and so Wayfarer is forever a single player game.
 
-- If starting over I would do a much better job of separating UI, core functionality and also AI. I tried to keep them separate, using events rather than direct function calls, but didn't go far enough, not anticipating that the project would grow so large. It would be really nice if the UI was entirely separate with a clear API such that someone else could in theory come along and completely overhaul the graphics and UI. As it is that would be no easy task, because the lines of separation got blurred.
+- If starting over, I would do a much better job of separating UI, core functionality and also AI. I tried to keep them separate, using events rather than direct function calls, but didn't go far enough. I didn't anticipate that the project would grow so large. It would be really nice if the UI was entirely separate with a clear API, such that someone else in theory could come along and completely replace the graphics and UI. As it is, that would be no easy task, because the lines of separation got blurred.
 
-- One thing I really wish I'd anticipated and set up early is a state management system. The game often saves the characters to disk, but there is no way to save a game itself mid-way through, or to undo a move. The game's state at any given point consists of hundreds of variables spread across dozens of objects and static classes. It would have been relatively easy to create a system early on that packaged up the state as a snapshot of that turn and kept track of a game through an array of snapshots, allowing a game to be saved and resumed, and moves to be undone.
+- One thing I really wish I'd anticipated and set up early is a state management system. The game often saves the characters to disk, but there is no way to save a game itself mid-way through, or to undo a move. The game's state at any given point consists of hundreds of variables spread across dozens of objects and static classes. It would have been relatively easy to create a system early on that packaged up the state as a snapshot of that turn and kept track of a game through an array of snapshots, allowing a game to be saved and resumed, and moves to be undone. It would be very difficult to do in retrospect because of the risk of missing a crucial variable.
 
-These flaws and the early design decisions what would have prevented them are obvious in hindsight. I take it as an encouraging measure of progress that I can see where I made mistakes and that I can chart how I've grown as a developer by when each file was written.
+These flaws - and the early design decisions that would have prevented them - are easy to see in hindsight. I take it as an encouraging measure of progress that these mistakes are obvious to me now. I started the project with many years of professional programming experience but can still chart how I've grown as a developer throughout the project by when each file was written.
 
 ## Conclusion
 
-The goal was to sharpen my C# and broader programming instincts while also making a fun game, and I feel I very much succeeded. The mistakes taught me much more than if I'd approached it perfectly right from the start. I'm only scratching the surface of what Unity can do, but it was never about learning Unity or becoming a games developer, so I'm not interested in going further down that path, at least at the moment.
+The goal was to sharpen my C# and broader programming instincts while also making a fun game, and I feel that I succeeded. The mistakes taught me much more than if I'd approached it perfectly right from the start. I'm still only scratching the surface of what Unity can do, but it was never about learning Unity or becoming a games developer, so I'm not looking to go any further down that path, at least at the moment.
 
-Making a game was a great decision, I think, because it's so much fun. Had I instead written a database report management system or something else more 'business applicable', I never would have worked on it for two years and reaped all the lessons along the way. My core skill - C# - and instincts about programming in general were helped enormously by this passion project, and those sharpened skills translate to any broader software development role, not just in games.
+Making a game was a great decision, I think, because it is such an engaging project. Had I instead written a database report management system or something else more 'business applicable', I never would have worked on it for two years and reaped all the lessons along the way. My core skill - C# - and instincts about programming in general were helped enormously by this passion project, and those sharpened skills will benefit any broader software development projects I work on, not just games.
 
-## Additional Resources - TODO
+## How to Play
 
-- Link to downloadable game (for those interested in trying it)
-- GitHub repository with README and selected code samples
+The latest version is available on [Github](https://github.com/tituspowell/wayfarer-game) and free to download and play. (Windows only.)
