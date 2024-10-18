@@ -1,14 +1,22 @@
 # Wayfarer: A C# Unity Passion Project
 
+![Wayfarer](/screenshots/General.PNG)
+
 ## Introduction
 
 **Wayfarer** is a single-player turn-based 'dungeon crawler' game that runs in Windows. I wrote it in C# using Unity, and it has 110,000 lines of code. It is the very definition of a passion project - I spent two years developing it, with no intention of a public release. It was always just for myself and family and friends to play. During that time it has evolved in scope and complexity far beyond what I imagined when starting it.
+
+![NPC](/screenshots/Creature1.PNG)![Demon](/screenshots/Creature2.PNG)
 
 ## Game Overview
 
 The core gameplay is that you start with a character, and have to win eight games to reach the title of Champion, at which point the character retires and you start with a new one. Each game is a snackable 15-30 minutes to play, and any items or gold you win a game with can be brought into the next one. So your character grows stronger with equipment and abilities as he or she progresses, but the challenges increase as you progress through the eight levels.
 
+![Character](screenshots/Character.PNG)
+
 What makes Wayfarer unique is the sheer variety of things that can happen. Every game is completely unique and memorable and makes you want to tell someone about the crazy adventure you just had. This is achieved through multiple interacting complex systems combined with a high degree of randomness. This leads to emergent, entertaining and frequent laugh-out-loud or gasp-out-loud experiences.
+
+![Combat](screenshots/Combat.PNG)
 
 To give you an idea of the staggering depth and variety, there are:
 
@@ -29,6 +37,10 @@ To give you an idea of the staggering depth and variety, there are:
 - **Religion** points you can accumulate to ask God to help you out in a fix, which he may or may not do.
 - Magic portals, quests, rumours, limb damages, curio locations, ranged weapons, arcane events, legendary items, a luck system and more!
 
+![Inventory](screenshots/Inventory.PNG)
+
+![Chaos](screenshots/Chaos.PNG)
+
 ## Technical Highlights
 
 Here are some of the interesting things the game does.
@@ -45,7 +57,7 @@ These diverse landscape types give a distinct flavour to each game. This is refi
 
 My guiding game design principle throughout has been 'The more varied and unpredictable, the better.' I think it adds a lot to the replayability to keep discovering things you didn't know could happen and rare magic items you've never seen before.
 
-[SCREENSHOTS]
+[SCREENSHOT]
 
 ### _Code Snippet_ - how the Infestation landscape variation is created:
 
@@ -125,6 +137,8 @@ public static void RemoveInfestationIfItBecameAHaven()
 
 </details>
 
+![NPC](/screenshots/Creature3.PNG)![Monster](/screenshots/Creature4.PNG)
+
 ### AI and NPC Behaviour
 
 In the original board game, NPCs would either attack, trade or join you. The rest of the time they would just stand still in a square and do nothing. Here's a quick overview of how I made them more interesting and unpredictable.
@@ -141,7 +155,9 @@ In addition to these surprise behaviours, the NPCs have a small chance of being 
 
 These are all relatively simple behavioural systems that can barely be called AI, but combined they give the impression of a living world and often produce delightful and unexpected interactions.
 
-[SCREENSHOTS]
+![Personality](screenshots/Personality1.PNG)
+
+![Personality](screenshots/Personality2.PNG)
 
 ### _Code Snippet_ - testing whether an NPC (called a Maverick in the game) is actually a Demon.
 
@@ -212,6 +228,8 @@ public void SeeIfSecretlyADemon()
 
 </details>
 
+![Demon](screenshots/Demon.PNG)
+
 ### Challenge and Tension
 
 Getting the right degree of challenge is crucial for any game, and I've been put off many commercial games for getting that delicate balance wrong.
@@ -232,7 +250,9 @@ When you win a game, your character gets to keep the gold and items he's carryin
 
 The combination of these factors means you have steadily building tension throughout each game. You're frequently on the edge of your seat in the later stages, as the landscape collapses around you and you're desperately trying to get to the exit with your precious new magic armour before the Doom Dice shut you down.
 
-[SCREENSHOTS]
+![Pits](/screenshots/Pits.PNG)
+
+![Doom Dice](/screenshots/DoomDice.PNG)
 
 ### _Code Snippet_ - the Doom Dice roll at the end of each turn:
 
@@ -342,6 +362,8 @@ IEnumerator DestroyDoomDice(DoomDice doomDice)
 
 </details>
 
+![Win](screenshots/Win.PNG)
+
 ## Development Journey and Current State
 
 The initial motivation for creating Wayfarer was to refresh my programming skills by recreating a family board game. I was completely new to Unity so it was an ambitious challenge to take on, having not done any coding for several years. I had no idea how much it would evolve beyond the original board game, or how deep and complex the game mechanics would become over the next two years.
@@ -354,11 +376,15 @@ The graphics are decidedly janky, my lack of Unity experience showing, with poor
 
 The clever things it does, and the wonderfully varied gameplay that is its core appeal, only really emerges once you get past the amateurish graphics and the lack of tutorial. Making it a finished, polished game would take an immense amount more work, and as I'm not looking to become a game designer, much of that would feel irrelevant and time-consuming - creating prettier animated assets, for example. I did learn Blender at one point to create a custom scythe model that appears so small on the screen you can't appreciate any of the detail. Perhaps in the near future, AI will be able to create animated 3D assets from a text prompt, which would make a graphical overhaul much easier.
 
+![UI](screenshots/Trading.PNG)
+
 ## Platforms
 
 Unity lets you build for different platforms. As a lifelong Windows user, I naturally developed it for Windows. This is obviously a limitation, as Mac users can't play it; nor can it be played on devices. Unity supports all these other platforms but porting it to another one would be non trivial. The game provides a lot of contextual information when you mouse-over elements in the game, for example; if porting to an iPad that would need to be reworked completely.
 
 I did briefly manage a web port and had it working in a browser early on. The challenge there is that the game saves to a save file to keep track of your characters and progress, which is too large for localStorage (and too precious if you've sunk thousands of hours into playing it). Saving it to the cloud using my brother's AWS key did work as a proof of concept but it would need a more scalable solution if shared publicly.
+
+[SCREENSHOT]
 
 ## Reflections on Technical Decisions
 
@@ -374,11 +400,19 @@ Here are my reflections on some of those technical decisions and what I learned 
 
 These flaws - and the early design decisions that would have prevented them - are easy to see in hindsight. I take it as an encouraging measure of progress that these mistakes are obvious to me now. I started the project with many years of professional programming experience but can still chart how I've grown as a developer throughout the project by when each file was written.
 
+[SCREENSHOT]
+
 ## Conclusion
 
 The goal was to sharpen my C# and broader programming instincts while also making a fun game, and I feel that I succeeded. The mistakes taught me much more than if I'd approached it perfectly right from the start. I'm still only scratching the surface of what Unity can do, but it was never about learning Unity or becoming a games developer, so I'm not looking to go any further down that path, at least at the moment.
 
 Making a game was a great decision, I think, because it is such an engaging project. Had I instead written a database report management system or something else more 'business applicable', I never would have worked on it for two years and reaped all the lessons along the way. My core skill - C# - and instincts about programming in general were helped enormously by this passion project, and those sharpened skills will benefit any broader software development projects I work on, not just games.
+
+![Godcall](screenshots/Godcall1.PNG)
+
+![Godcall](screenshots/Godcall2.PNG)
+
+![Godcall](screenshots/Godcall3.PNG)
 
 ## How to Play
 
