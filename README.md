@@ -57,7 +57,7 @@ These diverse landscape types give a distinct flavour to each game. This is refi
 
 My guiding game design principle throughout has been 'The more varied and unpredictable, the better.' I think it adds a lot to the replayability to keep discovering things you didn't know could happen and rare magic items you've never seen before.
 
-[SCREENSHOT]
+![Landscape](screenshots/Citadel.PNG)
 
 ### _Code Snippet_ - how the Infestation landscape variation is created:
 
@@ -384,7 +384,7 @@ Unity lets you build for different platforms. As a lifelong Windows user, I natu
 
 I did briefly manage a web port and had it working in a browser early on. The challenge there is that the game saves to a save file to keep track of your characters and progress, which is too large for localStorage (and too precious if you've sunk thousands of hours into playing it). Saving it to the cloud using my brother's AWS key did work as a proof of concept but it would need a more scalable solution if shared publicly.
 
-[SCREENSHOT]
+![Screenshot](screenshots/Full.PNG)
 
 ## Reflections on Technical Decisions
 
@@ -399,8 +399,6 @@ Here are my reflections on some of those technical decisions and what I learned 
 - One thing I really wish I'd anticipated and set up early is a state management system. The game often saves the characters to disk, but there is no way to save a game itself mid-way through, or to undo a move. The game's state at any given point consists of hundreds of variables spread across dozens of objects and static classes. It would have been relatively easy to create a system early on that packaged up the state as a snapshot of that turn and kept track of a game through an array of snapshots, allowing a game to be saved and resumed, and moves to be undone. It would be very difficult to do in retrospect because of the risk of missing a crucial variable.
 
 These flaws - and the early design decisions that would have prevented them - are easy to see in hindsight. I take it as an encouraging measure of progress that these mistakes are obvious to me now. I started the project with many years of professional programming experience but can still chart how I've grown as a developer throughout the project by when each file was written.
-
-[SCREENSHOT]
 
 ## Conclusion
 
