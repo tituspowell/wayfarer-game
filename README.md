@@ -435,4 +435,4 @@ Making a game was a great decision, I think, because it is such an engaging proj
 
 ## How to Play
 
-The latest version is available on [Github](https://github.com/tituspowell/wayfarer-game) and free to download and play. (Windows only.)
+The latest version is available on the [Github Releases page](https://github.com/tituspowell/wayfarer-game/releases) and free to download and play. (Windows only.)
