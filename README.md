@@ -157,7 +157,7 @@ In the original board game, NPCs would either attack, trade or join you. The res
 
 First, I introduced wandering mechanics. If they are within 3 squares of your character, an NPC detects you and reacts. If they are hostile, they will move towards you; the same if they are friendly and you beckon them. If not moving because of you, they revert to independent movement. First, the code checks if there are valuables within sight, and if so, the NPC will move towards them and pick them up. If not, the NPC will wander at random, with a chance of not moving, and a lower chance of returning the way they just came, so that their movement seems more focused and directional. When they meet other NPCs or monsters, there is a chance of a fight.
 
-Some NPC types are pacifist and won't ever provoke a fight; others are more aggressive. Some have specific known triggers, like a Bandit will attack you if you're perceived as 'rich, the value of your possessions exceeding a threshold. A Thug will attack you if you have low health. A Puritan will attack you if you have multiple diseases, and so on.
+Some NPC types are pacifist and won't ever provoke a fight; others are more aggressive. Some have specific known triggers, like a Bandit will attack you if you're perceived as being rich, the value of your possessions exceeding a threshold. A Thug will attack you if you have low health. A Puritan will attack you if you have multiple diseases, and so on.
 
 So that already makes the game feel more alive as these NPCs wander around with their different behaviours. But I wanted an extra level of unpredictability, so introduced secret personality traits. I came up with a list of possible triggers and a list of possible reactions, and each NPC gets one of each at random. One might give you his possessions if you enter a shop. Another might tell you a secret if you're in the dark without a light source. Another might attack you if you go through a portal.
 
@@ -232,7 +232,7 @@ public void SeeIfSecretlyADemon()
         chanceOfBeingADemon += 35;
     }
 
-    // Roll 1D100 and set the Maverick's 'isADemon' property if appropriate
+    // Roll 1D100 and set the Maverick's 'isADemon' property
     isADemon = Randomiser.PercentChanceSucceeds(chanceOfBeingADemon);
 }
 ```
@@ -245,7 +245,7 @@ public void SeeIfSecretlyADemon()
 
 Getting the right degree of challenge is crucial for any game, and I've been put off many commercial games for getting that delicate balance wrong.
 
-In the original board game version of Wayfarer, it was a multi-player game, so there was an inherent competitive challenge because whoever completed a quest and then escaped first would win. For my digital version, as a single player game, there needed to be some kind of time limit to provide tension. Otherwise you could just potter around the landscape collecting nice items and gold forever.
+In the original board game version of Wayfarer, it was a multi-player game, so there was an inherent competitive drama because whoever completed a quest and then escaped first would win. For my digital version, as a single player game, there needed to be some kind of time limit to provide tension. Otherwise you could just potter around the landscape collecting nice items and gold forever.
 
 Here are the various mechanics I've implemented to create tension and keep you on your toes.
 
@@ -253,7 +253,7 @@ First, there are the _Doom Dice_. After a set number of turns (18 in a level 1 g
 
 It works very well and fits with the unpredictable nature of the game. Once the Doom Dice start rolling, you never know exactly how many turns you have left but you know you need to hurry and that every turn matters.
 
-The second device for creating pressure is _pits_. Every turn, one of the 400 squares on the board collapses into an impassable pit, blocking your way - with a small but significant chance it will happen to open under you. So the landscape disintegrates over time, making it more and more difficult to escape. Of course there are various ways of dealing with pits - magic items, spells, religion, etc. But this successfully adds an extra layer of tension.
+The second device for creating pressure is _pits_. Every turn, one of the 400 squares on the 20x20 board collapses into an impassable pit, blocking your way - with a small but significant chance it will happen to open under you. So the landscape disintegrates over time, making it more and more difficult to escape. Of course there are various ways of dealing with pits - magic items, spells, religion, etc. But this successfully adds an extra layer of tension.
 
 One of the addictive qualities about Wayfarer is that no matter how powerful your character becomes, you can never take for granted that you can make it to an exit square without mishap. There are so many random things that can go wrong. It's a game of mitigating risk, but winning is never certain and that keeps it interesting.
 
@@ -262,9 +262,9 @@ When you win a game, your character gets to keep the gold and items he's carryin
 The combination of these factors means you have steadily building tension throughout each game. You're frequently on the edge of your seat in the later stages, as the landscape collapses around you and you're desperately trying to get to the exit with your precious new magic armour before the Doom Dice shut you down.
 
 <br><br>
-![Pits](/screenshots/Pits.PNG)
-<br><br>
 ![Doom Dice](/screenshots/DoomDice.PNG)
+<br><br>
+![Pits](/screenshots/Pits.PNG)
 <br><br>
 
 ### _Code Snippet_ - the Doom Dice roll at the end of each turn:
@@ -274,10 +274,11 @@ IEnumerator DoDoom()
 {
     if (turnCounter > turnAfterWhichDoomStarts && !doomAverted)
     {
-        // Wait for any panels to close before proceeding, as they might be busy godcalling to save from a pit
+        // Wait for any panels to close before proceeding, as they might be busy godcalling
+        // to save themselves from a pit
         yield return StartCoroutine(WaitForPanelsToClose());
 
-        CameraController.OnShouldMoveToVantagePoint(DoomDice.vantagePoint, false);
+        CameraController.MoveToVantagePoint(DoomDice.vantagePoint, false);
 
         // Spin dice #1 if it still exists
         SpinDoomDice(doomDice1, true, out bool dice1JustDoomed);
@@ -362,7 +363,7 @@ IEnumerator DestroyDoomDice(DoomDice doomDice)
     Destroy(doomDice.gameObject);
 
     // Return to vantage point as the explosion can knock the camera to the side
-    CameraController.OnShouldMoveToVantagePoint(DoomDice.vantagePoint, false);
+    CameraController.MoveToVantagePoint(DoomDice.vantagePoint, false);
 
     // After shake
     yield return StartCoroutine(ShakeAndWait(1f, 0.05f, 0f));
@@ -376,7 +377,7 @@ IEnumerator DestroyDoomDice(DoomDice doomDice)
 
 ## Development Journey and Current State
 
-The initial motivation for creating Wayfarer was to refresh my programming skills by recreating a family board game. I was completely new to Unity so it was an ambitious challenge to take on, having not done any coding for several years. I had no idea how much it would evolve beyond the original board game, or how deep and complex the game mechanics would become over the next two years.
+The initial motivation for creating Wayfarer was to refresh my programming skills by recreating a family board game. I was new to Unity so it was an ambitious challenge to take on, having not done any coding for several years. I had no idea how much it would evolve beyond the original board game, or how deep and complex the game mechanics would become over the next two years.
 
 One thing it suffers from is a lack of a wider player base. My family have been playing it avidly over the past two years and giving me fantastic feedback as well as obscure issues to fix. But because nobody new was playing it, there's a distinct lack of onboarding. Apart from a nominal 'tutorial mode' where it is slightly gentler with its random events, there really is nothing to help ease a new player into the game, or introduce the mechanics. A seasoned gamer would figure a lot of it out after a couple of games but my lack of focus on the user experience for new players is immediately evident if you try it.
 
@@ -384,7 +385,7 @@ I added a 'Help' button recently to at least give players a summary of where the
 
 The graphics are decidedly janky, my lack of Unity experience showing, with poor lighting, generic assets (a single animated monster token to represent all of the various monster types, for example) and very little awareness of shaders and particle effects. There is no audio at all.
 
-The clever things it does, and the wonderfully varied gameplay that is its core appeal, only really emerges once you get past the amateurish graphics and the lack of tutorial. Making it a finished, polished game would take an immense amount more work, and as I'm not looking to become a game designer, much of that would feel irrelevant and time-consuming - creating prettier animated assets, for example. I did learn Blender at one point to create a custom scythe model that appears so small on the screen you can't appreciate any of the detail. Perhaps in the near future, AI will be able to create animated 3D assets from a text prompt, which would make a graphical overhaul much easier.
+The clever things it does, and the wonderfully varied gameplay that is its core appeal, only really emerges once you get past the amateurish graphics and the lack of tutorial. Making it a finished, polished game would take an immense amount more work. As I'm not looking to become a game designer, much of that would feel irrelevant and time-consuming - creating prettier animated assets, for example. I did learn Blender at one point to create a custom scythe model that appears so small on the screen you can't appreciate any of the detail. Perhaps in the near future, AI will be able to create animated 3D assets from a text prompt, which would make a graphical overhaul much easier.
 
 <br><br>
 ![UI](screenshots/Trading.PNG)
@@ -392,9 +393,9 @@ The clever things it does, and the wonderfully varied gameplay that is its core 
 
 ## Platforms
 
-Unity lets you build for different platforms. As a lifelong Windows user, I naturally developed it for Windows. This is obviously a limitation, as Mac users can't play it; nor can it be played on devices. Unity supports all these other platforms but porting it to another one would be non trivial. The game provides a lot of contextual information when you mouse-over elements in the game, for example; if porting to an iPad that would need to be reworked completely.
+Unity lets you build for different platforms. As I and most of my family are lifelong Windows users, I naturally developed it for Windows. This is obviously a limitation, as Mac users can't play it; nor can it be played on devices. Unity supports all these other platforms but porting it to them would be non trivial. The game provides a lot of contextual information when you mouse-over elements in the game, for example; if porting to an iPad, that would need to be reworked completely.
 
-I did briefly manage a web port and had it working in a browser early on. The challenge there is that the game saves to a save file to keep track of your characters and progress, which is too large for localStorage (and too precious if you've sunk thousands of hours into playing it). Saving it to the cloud using my brother's AWS key did work as a proof of concept but it would need a more scalable solution if shared publicly.
+I did briefly manage a web adaptation early on and had it working in a browser. The challenge there is that the game saves to a file to keep track of your characters and progress, which is too large for localStorage (and too precious if you've sunk thousands of hours into playing it). Saving it to the cloud using my brother's AWS key did work as a proof of concept but it would need a more scalable solution if shared publicly.
 
 <br><br>
 ![Screenshot](screenshots/Full.PNG)
@@ -406,13 +407,13 @@ The game successfully provides countless hours of entertainment but several init
 
 Here are my reflections on some of those technical decisions and what I learned from them.
 
-- Single player vs multiplayer. As a Unity noob starting an ambitious project, I knew that multiplayer would be too difficult for me. I also knew that if I didn't weave it into the game right from the beginning, it would be impossible to add later. I probably should have started with an unrelated simple multiplayer game first - Tic Tac Toe or Battleships. But I was eager to dive in and so Wayfarer is forever a single player game.
+- Single player vs multiplayer. As a Unity noob starting an ambitious project, I knew that multiplayer would be too difficult for me. I also knew that if I didn't weave it into the game right from the beginning, it would be impossible to add later. I probably should have started with an unrelated simple multiplayer game first - Tic Tac Toe or Battleships. But I was eager to dive in, and so Wayfarer is forever a single player game.
 
-- If starting over, I would do a much better job of separating UI, core functionality and also AI. I tried to keep them separate, using events rather than direct function calls, but didn't go far enough. I didn't anticipate that the project would grow so large. It would be really nice if the UI was entirely separate with a clear API, such that someone else in theory could come along and completely replace the graphics and UI. As it is, that would be no easy task, because the lines of separation got blurred.
+- If starting over, I would do a much better job of separating UI, core functionality and also AI. I tried to keep them separate, using events rather than direct function calls, but didn't go far enough. I didn't anticipate that the project would grow so large. It would be really nice if the UI was entirely separate with a clear fixed interface, such that someone else in theory could come along and completely replace the graphics and UI. As it is, that would be no easy task, because the lines of separation got more and more blurred over time.
 
-- One thing I really wish I'd anticipated and set up early is a state management system. The game often saves the characters to disk, but there is no way to save a game itself mid-way through, or to undo a move. The game's state at any given point consists of hundreds of variables spread across dozens of objects and static classes. It would have been relatively easy to create a system early on that packaged up the state as a snapshot of that turn and kept track of a game through an array of snapshots, allowing a game to be saved and resumed, and moves to be undone. It would be very difficult to do in retrospect because of the risk of missing a crucial variable.
+- One thing I really wish I'd anticipated and set up initially is a state management system. The game often saves the characters to disk, but there is no way to save a game itself mid-way through, or to undo a move. The game's state at any given point consists of hundreds of variables spread across dozens of objects and static classes. It would have been relatively easy to create a system early on that packaged up the state as a snapshot of that turn and kept track of a game through an array of snapshots, allowing a game to be saved and resumed, and moves to be undone. It would be very difficult to do in retrospect because of the risk of missing a crucial variable.
 
-These flaws - and the early design decisions that would have prevented them - are easy to see in hindsight. I take it as an encouraging measure of progress that these mistakes are obvious to me now. I started the project with many years of professional programming experience but can still chart how I've grown as a developer throughout the project by when each file was written.
+These flaws - and the early design decisions that would have prevented them - are easy to see in hindsight. I take it as an encouraging measure of progress that these mistakes are obvious to me now. I started the project with many years of professional programming experience but can still clearly chart how I've grown as a developer throughout this project by when each file was written.
 
 <br><br>
 ![Game](screenshots/Full3.PNG)
@@ -420,9 +421,9 @@ These flaws - and the early design decisions that would have prevented them - ar
 
 ## Conclusion
 
-The goal was to sharpen my C# and broader programming instincts while also making a fun game, and I feel that I succeeded. The mistakes taught me much more than if I'd approached it perfectly right from the start. I'm still only scratching the surface of what Unity can do, but it was never about learning Unity or becoming a games developer, so I'm not looking to go any further down that path, at least at the moment.
+The goal was to sharpen my C# and broader programming instincts while also making a fun game, and I feel that I succeeded. The mistakes taught me much more than if I'd approached it perfectly right from the start. I'm only scratching the surface of what Unity can do, but it was never about learning Unity or becoming a games developer, so I'm not looking to go any further down that path, at least at the moment.
 
-Making a game was a great decision, I think, because it is such an engaging project. Had I instead written a database report management system or something else more 'business applicable', I never would have worked on it for two years and reaped all the lessons along the way. My core skill - C# - and instincts about programming in general were helped enormously by this passion project, and those sharpened skills will benefit any broader software development projects I work on, not just games.
+Making a game was a great decision, I think, because it is such an engaging project. Had I instead written a database report management system or something else more 'business applicable', I never would have worked passionately on it for two years and reaped all the lessons along the way. My core technical skill - C# - and instincts about programming in general were helped enormously by this fun project, and those sharpened skills will benefit all broader software development projects I work on, not just games.
 
 <br><br>
 ![Godcall](screenshots/Godcall1.PNG)
