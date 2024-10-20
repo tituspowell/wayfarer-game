@@ -9,7 +9,7 @@
 **Wayfarer** is a single-player turn-based 'dungeon crawler' game that runs in Windows. I wrote it in C# using Unity, and it has 110,000 lines of code. It is the very definition of a passion project - I spent two years developing it, with no intention of a public release. It was always just for myself and family and friends to play. During that time it has evolved in scope and complexity far beyond what I imagined when starting it.
 
 <br><br>
-![NPC](/screenshots/Creatures1.PNG)
+![NPC](/screenshots/Creatures1.png)
 <br><br>
 
 ## Game Overview
@@ -149,7 +149,7 @@ Character.BroadcastLessImportantInfo($"The infestation source{where} has become 
 ```
 
 <br><br>
-![NPC](/screenshots/Creatures2.PNG)
+![NPC](/screenshots/Creatures2.png)
 <br><br>
 
 ### AI and NPC Behaviour
