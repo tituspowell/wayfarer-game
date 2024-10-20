@@ -31,8 +31,8 @@ To give you an idea of the staggering depth and variety, there are:
 - 14 different procedurally generated **landscape** types to explore (Catacombs, Forest, Citadel, Swamp, Desert, etc.) with a unique layout every time.
 - 17 different **landscape variations** (each of the above could be Frozen, Intense, Toxic, Sacred, etc.)
 - 44 different **character classes** you can be, and 16 different fantasy **races**, each with their own advantages and disadvantages.
-- 56 different **abilities** you can gain on winning a game to better equip you in subsequent ones.
-- 255 different **magic items** you can potentially find, use and keep.
+- 56 **abilities** you can gain on winning a game to better equip you in subsequent ones.
+- 255 **magic items** you can potentially find, use and keep.
 - 48 **magic spells** you can potentially learn and cast.
 - 56 classes of **NPCs** with different behaviours, skills and unpredictable personalities, along with a random name generator. Some will offer to join as a companion. Others will trade or attack. Sometimes they fight each other.
 - 57 **monster** types with a range of possible behaviours.
@@ -57,15 +57,15 @@ Here are some of the interesting things the game does.
 
 ### Landscape Generation
 
-The game is a loose adaptation of a family board game I created years ago. One of the neat things about the original board game was the way the landscape is revealed as you explore. Each turn you move into a neighbouring square, and then iteratively reveal the surrounding walls or doors of any squares within sight. Then you discover if they contain anything, be it gold, an item, a trap, a monster, an NPC or whatever.
+The game is a loose adaptation of a family board game I created years ago. One of the neat things about the original board game was the way the landscape is revealed as you explore. Each turn, you move into a neighbouring square, and then iteratively reveal the surrounding walls or doors of any squares within sight. Then you discover if they contain anything, be it gold, an item, a trap, a monster, an NPC or whatever.
 
 I used the same approach with this digital version of the game. Unlike the board game, though, the layout of walls and doors is procedurally generated in advance, hidden from the user and revealed as they explore. The contents of each location are still dynamically generated when they explore that square, because there are various factors that can change what you find. If you own a Luckvest or a Shrouded Lantern or a Helm of Iniquity, for instance, that changes what you may find as you explore.
 
-Each of the 14 different landscape types - catacombs, forest, labyrinth, swamp, etc. - have a different distribution of walls and doors when pre-generating the landscape layout each game, along with specific peculiarities. Old City and Necropolis are claustrophobic but a higher chance of events. Desert and Caverns are more open. In Desert you can run faster but lose health if you do. In Necropolis, many of the creatures you find are undead. In Volcano, deadly lava gradually spreads across the board. In Forest you can glimpse creatures without them noticing you. In Lagoon you can dive into the large central water area with a high concentration of events, or skirt around it. In Citadel the walls are arranged in procedurally generated rooms, surrounded by a moat.
+Each of the 14 landscape types - catacombs, forest, labyrinth, swamp, etc. - have a different distribution of walls and doors when pre-generating the landscape layout each game, along with specific peculiarities. Old City and Necropolis are claustrophobic but have a higher chance of events. In Desert, you can run faster but lose health if you do. In Volcano, deadly lava gradually spreads across the board. In Forest, you can glimpse creatures without them noticing you. In Lagoon, you can dive into the large central water area with a high concentration of events, or skirt around it. In Citadel, the walls are arranged in procedurally generated rooms, surrounded by a moat.
 
 These diverse landscape types give a distinct flavour to each game. This is refined with a random selection of landscape variations each time you play, so in one game the Swamp may be _frozen_ where you can slide in straight lines. In another game it may be _toxic_ and you lose health every turn but healing is free at temples. In another it might be populated by NPCs, or infested with a particular type of monster. This combination of random landscape type and random set of variations means that not only is the procedurally generated layout different every game, but the theme of each game is unique before you've even started.
 
-My guiding game design principle throughout has been 'The more varied and unpredictable, the better.' I think it adds a lot to the replayability to keep discovering things you didn't know could happen and rare magic items you've never seen before.
+My guiding game design principle throughout has been 'The more varied and unpredictable, the better.' I think it adds a lot to the replayability to keep surprising the user with things they didn't know could happen and rare magic items they've never seen before.
 
 <br><br>
 ![Landscape](screenshots/Citadel.PNG)
@@ -97,12 +97,12 @@ public static void InitialiseInfested(Square sourceSquare, bool addInitialMonste
 
 public static void InfestationIncreases()
 {
-if (infestationSource.isHaven)
-{
-// Monsters aren't allowed in Havens
-RemoveInfestationIfItBecameAHaven();
-return;
-}
+    if (infestationSource.isHaven)
+    {
+        // Monsters aren't allowed in Havens
+        RemoveInfestationIfItBecameAHaven();
+        return;
+    }
 
     // Don't exceed the maximum number of monsters in a square
     if (Monster.GetMonstersInSquare(infestationSource, false).Count <= maxMonstersInSquare)
@@ -131,10 +131,10 @@ return;
 
 public static void RemoveInfestationIfItBecameAHaven()
 {
-if ((infested || Chaos.pestilence) && infestationSource.isHaven)
-{
-string where = SquareContentsDescriber.GetDirectionDescription(infestationSource, Character.currentSquare);
-Character.BroadcastLessImportantInfo($"The infestation source{where} has become a Haven so the infestation is over.");
+    if ((infested || Chaos.pestilence) && infestationSource.isHaven)
+    {
+        string where = SquareContentsDescriber.GetDirectionDescription(infestationSource, Character.currentSquare);
+        Character.BroadcastLessImportantInfo($"The infestation source{where} has become a Haven so the infestation is over.");
 
         // No more infestation
         Chaos.pestilence = false;
@@ -143,7 +143,6 @@ Character.BroadcastLessImportantInfo($"The infestation source{where} has become 
         // Remove the symbol in the square
         DungeonManager.RemoveSquareSymbolIn(infestationSource);
     }
-
 }
 
 ```
