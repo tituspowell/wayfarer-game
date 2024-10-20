@@ -20,7 +20,7 @@ The core gameplay is that you start with a character, and have to win eight game
 ![Character](screenshots/Character.PNG)
 <br><br>
 
-What makes Wayfarer unique is the sheer variety of things that can happen. Every game is completely unique and memorable and makes you want to tell someone about the crazy adventure you just had. This is achieved through multiple interacting complex systems combined with a high degree of randomness. This leads to emergent, entertaining and frequent laugh-out-loud or gasp-out-loud experiences.
+What makes Wayfarer unusual is the sheer variety of things that can happen. Every game is completely unique and memorable and makes you want to tell someone about the crazy adventure you just had. This is achieved through multiple interacting complex systems combined with a high degree of randomness. This leads to emergent, entertaining and frequent laugh-out-loud or gasp-out-loud experiences.
 
 <br><br>
 ![Combat](screenshots/Combat.PNG)
@@ -29,15 +29,15 @@ What makes Wayfarer unique is the sheer variety of things that can happen. Every
 To give you an idea of the staggering depth and variety, there are:
 
 - 14 different procedurally generated **landscape** types to explore (Catacombs, Forest, Citadel, Swamp, Desert, etc.) with a unique layout every time.
-- 17 different **landscape variations** (the catacombs or forest could be Frozen, Intense, Toxic, Sacred, etc.)
-- 44 different **character classes** you can be, and 16 different fantasy **races**, each with unique advantages and disadvantages.
+- 17 different **landscape variations** (each of the above could be Frozen, Intense, Toxic, Sacred, etc.)
+- 44 different **character classes** you can be, and 16 different fantasy **races**, each with their own advantages and disadvantages.
 - 56 different **abilities** you can gain on winning a game to better equip you in subsequent ones.
-- 255 unique **magic items** you can potentially find, use and keep.
+- 255 different **magic items** you can potentially find, use and keep.
 - 48 **magic spells** you can potentially learn and cast.
 - 56 classes of **NPCs** with different behaviours, skills and unpredictable personalities, along with a random name generator. Some will offer to join as a companion. Others will trade or attack. Sometimes they fight each other.
-- 57 unique **monster** types with a range of possible behaviours.
-- 23 different **trap** types.
-- 23 different **diseases** you can catch that temporarily debuff you until they are cured.
+- 57 **monster** types with a range of possible behaviours.
+- 23 **trap** types.
+- 23 **diseases** you can catch that temporarily debuff you until they are cured.
 - 13 **Houses** you can align yourself with giving you optional extra challenges and rewards if you succeed.
 - 96 **Chaos effects** - dramatic and fun gameplay variants that you can trigger or try to avoid.
 - **Laws** that you have the option of breaking, with stiff penalties if you are then caught by a Sentinel.
