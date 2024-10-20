@@ -1,22 +1,30 @@
 # Wayfarer: A C# Unity Passion Project
 
-![Wayfarer](/screenshots/General.PNG)
+<br><br>
+![Wayfarer](/screenshots/Full2.PNG)
+<br><br>
 
 ## Introduction
 
 **Wayfarer** is a single-player turn-based 'dungeon crawler' game that runs in Windows. I wrote it in C# using Unity, and it has 110,000 lines of code. It is the very definition of a passion project - I spent two years developing it, with no intention of a public release. It was always just for myself and family and friends to play. During that time it has evolved in scope and complexity far beyond what I imagined when starting it.
 
-![NPC](/screenshots/Creature1.PNG)![Demon](/screenshots/Creature2.PNG)
+<br><br>
+![NPC](/screenshots/Creatures1.PNG)
+<br><br>
 
 ## Game Overview
 
 The core gameplay is that you start with a character, and have to win eight games to reach the title of Champion, at which point the character retires and you start with a new one. Each game is a snackable 15-30 minutes to play, and any items or gold you win a game with can be brought into the next one. So your character grows stronger with equipment and abilities as he or she progresses, but the challenges increase as you progress through the eight levels.
 
+<br><br>
 ![Character](screenshots/Character.PNG)
+<br><br>
 
 What makes Wayfarer unique is the sheer variety of things that can happen. Every game is completely unique and memorable and makes you want to tell someone about the crazy adventure you just had. This is achieved through multiple interacting complex systems combined with a high degree of randomness. This leads to emergent, entertaining and frequent laugh-out-loud or gasp-out-loud experiences.
 
+<br><br>
 ![Combat](screenshots/Combat.PNG)
+<br><br>
 
 To give you an idea of the staggering depth and variety, there are:
 
@@ -37,9 +45,11 @@ To give you an idea of the staggering depth and variety, there are:
 - **Religion** points you can accumulate to ask God to help you out in a fix, which he may or may not do.
 - Magic portals, quests, rumours, limb damages, curio locations, ranged weapons, arcane events, legendary items, a luck system and more!
 
+<br><br>
 ![Inventory](screenshots/Inventory.PNG)
-
+<br><br>
 ![Chaos](screenshots/Chaos.PNG)
+<br><br>
 
 ## Technical Highlights
 
@@ -57,12 +67,11 @@ These diverse landscape types give a distinct flavour to each game. This is refi
 
 My guiding game design principle throughout has been 'The more varied and unpredictable, the better.' I think it adds a lot to the replayability to keep discovering things you didn't know could happen and rare magic items you've never seen before.
 
+<br><br>
 ![Landscape](screenshots/Citadel.PNG)
+<br><br>
 
 ### _Code Snippet_ - how the Infestation landscape variation is created:
-
-<details>
-<summary>Click this triangle to view the code.</summary>
 
 ```c#
 public static void InitialiseInfested(Square sourceSquare, bool addInitialMonster)
@@ -83,16 +92,17 @@ public static void InitialiseInfested(Square sourceSquare, bool addInitialMonste
 
     // Smash surrounding walls and doors so they aren't just stuck in a box
     sourceSquare.DestroySurroundingBoundaries(true, true, false);
+
 }
 
 public static void InfestationIncreases()
 {
-    if (infestationSource.isHaven)
-    {
-        // Monsters aren't allowed in Havens
-        RemoveInfestationIfItBecameAHaven();
-        return;
-    }
+if (infestationSource.isHaven)
+{
+// Monsters aren't allowed in Havens
+RemoveInfestationIfItBecameAHaven();
+return;
+}
 
     // Don't exceed the maximum number of monsters in a square
     if (Monster.GetMonstersInSquare(infestationSource, false).Count <= maxMonstersInSquare)
@@ -116,14 +126,15 @@ public static void InfestationIncreases()
             character.CheckIfVisibleMavericksReact();
         }
     }
+
 }
 
 public static void RemoveInfestationIfItBecameAHaven()
 {
-    if ((infested || Chaos.pestilence) && infestationSource.isHaven)
-    {
-        string where = SquareContentsDescriber.GetDirectionDescription(infestationSource, Character.currentSquare);
-        Character.BroadcastLessImportantInfo($"The infestation source{where} has become a Haven so the infestation is over.");
+if ((infested || Chaos.pestilence) && infestationSource.isHaven)
+{
+string where = SquareContentsDescriber.GetDirectionDescription(infestationSource, Character.currentSquare);
+Character.BroadcastLessImportantInfo($"The infestation source{where} has become a Haven so the infestation is over.");
 
         // No more infestation
         Chaos.pestilence = false;
@@ -132,12 +143,14 @@ public static void RemoveInfestationIfItBecameAHaven()
         // Remove the symbol in the square
         DungeonManager.RemoveSquareSymbolIn(infestationSource);
     }
+
 }
+
 ```
 
-</details>
-
-![NPC](/screenshots/Creature3.PNG)![Monster](/screenshots/Creature4.PNG)
+<br><br>
+![NPC](/screenshots/Creatures2.PNG)
+<br><br>
 
 ### AI and NPC Behaviour
 
@@ -155,14 +168,13 @@ In addition to these surprise behaviours, the NPCs have a small chance of being 
 
 These are all relatively simple behavioural systems that can barely be called AI, but combined they give the impression of a living world and often produce delightful and unexpected interactions.
 
+<br><br>
 ![Personality](screenshots/Personality1.PNG)
-
+<br><br>
 ![Personality](screenshots/Personality2.PNG)
+<br><br>
 
 ### _Code Snippet_ - testing whether an NPC (called a Maverick in the game) is actually a Demon.
-
-<details>
-<summary>Click this triangle to view the code.</summary>
 
 ```c#
 public void SeeIfSecretlyADemon()
@@ -226,9 +238,9 @@ public void SeeIfSecretlyADemon()
 }
 ```
 
-</details>
-
+<br><br>
 ![Demon](screenshots/Demon.PNG)
+<br><br>
 
 ### Challenge and Tension
 
@@ -250,14 +262,13 @@ When you win a game, your character gets to keep the gold and items he's carryin
 
 The combination of these factors means you have steadily building tension throughout each game. You're frequently on the edge of your seat in the later stages, as the landscape collapses around you and you're desperately trying to get to the exit with your precious new magic armour before the Doom Dice shut you down.
 
+<br><br>
 ![Pits](/screenshots/Pits.PNG)
-
+<br><br>
 ![Doom Dice](/screenshots/DoomDice.PNG)
+<br><br>
 
 ### _Code Snippet_ - the Doom Dice roll at the end of each turn:
-
-<details>
-<summary>Click this triangle to view the code.</summary>
 
 ```c#
 IEnumerator DoDoom()
@@ -360,9 +371,9 @@ IEnumerator DestroyDoomDice(DoomDice doomDice)
 }
 ```
 
-</details>
-
+<br><br>
 ![Win](screenshots/Win.PNG)
+<br><br>
 
 ## Development Journey and Current State
 
@@ -376,7 +387,9 @@ The graphics are decidedly janky, my lack of Unity experience showing, with poor
 
 The clever things it does, and the wonderfully varied gameplay that is its core appeal, only really emerges once you get past the amateurish graphics and the lack of tutorial. Making it a finished, polished game would take an immense amount more work, and as I'm not looking to become a game designer, much of that would feel irrelevant and time-consuming - creating prettier animated assets, for example. I did learn Blender at one point to create a custom scythe model that appears so small on the screen you can't appreciate any of the detail. Perhaps in the near future, AI will be able to create animated 3D assets from a text prompt, which would make a graphical overhaul much easier.
 
+<br><br>
 ![UI](screenshots/Trading.PNG)
+<br><br>
 
 ## Platforms
 
@@ -384,7 +397,9 @@ Unity lets you build for different platforms. As a lifelong Windows user, I natu
 
 I did briefly manage a web port and had it working in a browser early on. The challenge there is that the game saves to a save file to keep track of your characters and progress, which is too large for localStorage (and too precious if you've sunk thousands of hours into playing it). Saving it to the cloud using my brother's AWS key did work as a proof of concept but it would need a more scalable solution if shared publicly.
 
+<br><br>
 ![Screenshot](screenshots/Full.PNG)
+<br><br>
 
 ## Reflections on Technical Decisions
 
@@ -400,17 +415,23 @@ Here are my reflections on some of those technical decisions and what I learned 
 
 These flaws - and the early design decisions that would have prevented them - are easy to see in hindsight. I take it as an encouraging measure of progress that these mistakes are obvious to me now. I started the project with many years of professional programming experience but can still chart how I've grown as a developer throughout the project by when each file was written.
 
+<br><br>
+![Game](screenshots/Full3.PNG)
+<br><br>
+
 ## Conclusion
 
 The goal was to sharpen my C# and broader programming instincts while also making a fun game, and I feel that I succeeded. The mistakes taught me much more than if I'd approached it perfectly right from the start. I'm still only scratching the surface of what Unity can do, but it was never about learning Unity or becoming a games developer, so I'm not looking to go any further down that path, at least at the moment.
 
 Making a game was a great decision, I think, because it is such an engaging project. Had I instead written a database report management system or something else more 'business applicable', I never would have worked on it for two years and reaped all the lessons along the way. My core skill - C# - and instincts about programming in general were helped enormously by this passion project, and those sharpened skills will benefit any broader software development projects I work on, not just games.
 
+<br><br>
 ![Godcall](screenshots/Godcall1.PNG)
 
 ![Godcall](screenshots/Godcall2.PNG)
 
 ![Godcall](screenshots/Godcall3.PNG)
+<br><br>
 
 ## How to Play
 
