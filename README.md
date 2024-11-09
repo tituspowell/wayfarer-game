@@ -87,6 +87,7 @@ public sealed class InfestationSpawner
     {
     }
 
+    // The readonly get accessor to give access to the instance
     public static InfestationSpawner Instance
     {
         get
@@ -110,7 +111,7 @@ public sealed class InfestationSpawner
     public void InitialiseInfested(Square sourceSquare, bool addInitialMonster)
     {
         // Some error checking
-        if (IsInfestationActive == false)
+        if (IsInfestationActive == true)
         {
             Debug.Log("Tried to initialise Infested when already active! Ignoring.");
             return;
@@ -151,18 +152,13 @@ public sealed class InfestationSpawner
     public void InfestationIncreases()
     {
         // Some error checking
-        if (IsInfestationActive == true)
+        if (IsInfestationActive == false)
         {
             Debug.Log("Tried to increase infestation when not active! Ignoring.");
             return;
         }
 
-        if (InfestationSource == null)
-        {
-            Debug.Log("Tried to increase infestation when source square is null! Ignoring.");
-            return;
-        }
-
+        // Check whether the source square has become a Haven
         if (InfestationSource.isHaven)
         {
             // Monsters aren't allowed in Havens
@@ -170,13 +166,15 @@ public sealed class InfestationSpawner
             return;
         }
 
+        // Don't exceed the maximum number of monsters in a square
         if (Monster.GetMonstersInSquare(InfestationSource, false).Count <= maxMonstersInSquare)
         {
+            // Spawn and initialise a new monster
             Monster monster = Monster.SpawnMonster(InfestationSource, false);
             monster.Initialise(InfestationSource, false, infestationMonsterType, true);
             monster.SetNotRareVariation();
 
-            // In case the player is nearby
+            // If the player is nearby, react
             if (Character.initialised)
             {
                 Character.CheckIfVisibleMonstersReact();
@@ -192,6 +190,7 @@ public sealed class InfestationSpawner
 
     public void EndInfestation()
     {
+        // Tell the player
         string where = SquareContentsDescriber.GetDirectionDescription(InfestationSource, Character.currentSquare);
         Character.BroadcastLessImportantInfo($"The infestation source{where} has become a Haven so the infestation is over.");
 
