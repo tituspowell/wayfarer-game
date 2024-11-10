@@ -327,12 +327,20 @@ The combination of these factors means you have steadily building tension throug
 ### _Code Snippet_ - the Doom Dice roll at the end of each turn:
 
 ```c#
+// This is a coroutine in Unity, which is an asynchronous function. Because it's async,
+// it can pause execution without blocking the main thread. We need it because we're
+// going to be waiting, and want Unity to be able to continue processing in the background.
+// Unity requires that coroutines have a return type of IEnumerator.
 IEnumerator DoDoom()
 {
     if (turnCounter > turnAfterWhichDoomStarts && !doomAverted)
     {
         // Wait for any panels to close before proceeding, as they might be busy godcalling
-        // to save themselves from a pit
+        // to save themselves from a pit.
+        // 'yield return' pauses execution. In this case we start another coroutine and
+        // wait for it to be completed before proceeding. This is how a coroutine is split
+        // into smaller parts, the equivalent of breaking up a long function. Without it,
+        // this coroutine would be enormous and trying to do too many things.
         yield return StartCoroutine(WaitForPanelsToClose());
 
         CameraController.MoveToVantagePoint(DoomDice.vantagePoint, false);
@@ -351,18 +359,21 @@ IEnumerator DoDoom()
             gameOver = true;
         }
 
-        // Wait so they can see the animation
+        // Pause execution so they can see the animation. Since this is a coroutine,
+        // we aren't blocking the thread and Unity can continue other processes.
         yield return new WaitForSeconds(3.5f);
 
         // Blow up either dice that rolled a '1' with camera shake and an explosion
         if (dice1JustDoomed && doomDice1 != null)
         {
+            // Pause while we explode the first dice object
             yield return StartCoroutine(DestroyDoomDice(doomDice1));
             doomDice1 = null;
         }
 
         if (dice2JustDoomed && doomDice2 != null)
         {
+            // Pause while we explode the second dice object
             yield return StartCoroutine(DestroyDoomDice(doomDice2));
             doomDice2 = null;
         }
@@ -372,8 +383,9 @@ IEnumerator DoDoom()
         {
             // Unlucky! Game over.
             yield return new WaitForSeconds(0.5f);
-
             GameLost();
+
+            // 'yield break' terminates the coroutine, the equivalent of 'return' breaking out of a function
             yield break;
         }
         else if (dice1JustDoomed || dice2JustDoomed)
