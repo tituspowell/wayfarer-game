@@ -167,7 +167,7 @@ public sealed class InfestationSpawner
         }
 
         // Don't exceed the maximum number of monsters in a square
-        if (Monster.GetMonstersInSquare(InfestationSource, false).Count <= maxMonstersInSquare)
+        if (Monster.GetMonstersInSquare(InfestationSource, false).Count < maxMonstersInSquare)
         {
             // Spawn and initialise a new monster
             Monster monster = Monster.SpawnMonster(InfestationSource, false);
@@ -216,7 +216,7 @@ First, I introduced wandering mechanics. If they are within 3 squares of your ch
 
 Some NPC types are pacifist and won't ever provoke a fight; others are more aggressive. Some have specific known triggers, like a Bandit will attack you if you're perceived as being rich, the value of your possessions exceeding a threshold. A Thug will attack you if you have low health. A Puritan will attack you if you have multiple diseases, and so on.
 
-So that already makes the game feel more alive as these NPCs wander around with their different behaviours. But I wanted an extra level of unpredictability, so introduced secret personality traits. I came up with a list of possible triggers and a list of possible reactions, and each NPC gets one of each at random. One might give you his possessions if you enter a shop. Another might tell you a secret if you're in the dark without a light source. Another might attack you if you go through a portal.
+That already makes the game feel more alive as these NPCs wander around with their different behaviours. But I wanted an extra level of unpredictability, so introduced secret personality traits. I came up with a list of possible triggers and a list of possible reactions, and each NPC gets one of each at random. One might give you his possessions if you enter a shop. Another might tell you a secret if you're in the dark without a light source. Another might attack you if you go through a portal.
 
 You don't know what the NPC's secret personality trait or trigger is, so you're often surprised. Your loyal Smuggler companion may suddenly announce he was actually a Friar all along. The Jester you're trading with may pick your pocket. The Scribe might reveal he is carrying a magic item, or knows where one is.
 
